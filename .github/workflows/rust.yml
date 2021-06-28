@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Prepare
-      run: "sudo -y apt install xorg-dev"
+      run: "sudo apt -y install xorg-dev"
     - name: Build
       run: cargo build --verbose
     - name: Run tests
