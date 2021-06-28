@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Prepare
+      run: "sudo -y apt install xorg-dev"
     - name: Build
       run: cargo build --verbose
     - name: Run tests
