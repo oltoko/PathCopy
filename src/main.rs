@@ -1,11 +1,10 @@
 use clap::{crate_version, App, Arg};
-use std::path::Path;
 use clipboard::{ClipboardContext, ClipboardProvider};
+use std::path::Path;
 
 const PATH_NAME: &str = "path";
 
 fn main() {
-
     let matches = App::new("PathCopy")
         .version(crate_version!()).version_short("v")
         .about("Copies the absolute Path of the given file or directory to the clipboard. It follows symlinks and uses the absolute path of the linked file.")
@@ -39,14 +38,17 @@ fn main() {
         Err(_) => {
             eprintln!("Failed to place the given path into the clipboard. The absolute version might contain some unsupported characters.");
             std::process::exit(3);
-        },
+        }
     };
 
     match ctx.set_contents(content) {
-        Ok(()) => ()/* Everything is fine 😌 */,
+        Ok(()) => (), /* Everything is fine 😌 */
         Err(e) => {
-            eprintln!("Failed to place the absolute path of {} into the clipboard: {}", input_path, e);
+            eprintln!(
+                "Failed to place the absolute path of {} into the clipboard: {}",
+                input_path, e
+            );
             std::process::exit(4);
-        },
+        }
     };
 }
