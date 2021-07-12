@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Which tag to deploy as:"
+        description: "Version:"
         required: true
   push:
     tags:
@@ -21,6 +21,7 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     steps:
+
       - name: Create artifacts directory
         run: mkdir artifacts
 
@@ -33,9 +34,11 @@ jobs:
           else
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           fi
+
       - name: Validate version environment variable
         run: |
           echo "Version being built against is version ${{ env.VERSION }}"!
+
       - name: Create GitHub release
         id: release
         uses: actions/create-release@v1
@@ -127,18 +130,18 @@ jobs:
       shell: bash
       run: |
         cp target/release/pc.exe pc.exe
-        7z a pc_windows.zip "pc.exe"
-        7z a pc_windows.zip "README.md"
-        7z a pc_windows.zip "LICENSE"
-        echo "ASSET=pc_windows.zip" >> $GITHUB_ENV
+        7z a pc_${{ env.RELEASE_VERSION }}_${{ matrix.build }}.zip "pc.exe"
+        7z a pc_${{ env.RELEASE_VERSION }}_${{ matrix.build }}.zip "README.md"
+        7z a pc_${{ env.RELEASE_VERSION }}_${{ matrix.build }}.zip "LICENSE"
+        echo "ASSET=pc_${{ env.RELEASE_VERSION }}_${{ matrix.build }}.zip" >> $GITHUB_ENV
 
     - name: Bundle release (Linux and macOS)
       if: matrix.os != 'windows-latest'
       shell: bash
       run: |
         cp target/release/pc ./pc
-        tar -czvf pc_${{ matrix.build }}.tar.gz pc README.md LICENSE
-        echo "ASSET=pc_${{ matrix.build }}.tar.gz" >> $GITHUB_ENV
+        tar -czvf pc_${{ env.RELEASE_VERSION }}_${{ matrix.build }}.tar.gz pc README.md LICENSE
+        echo "ASSET=pc_${{ env.RELEASE_VERSION }}_${{ matrix.build }}.tar.gz" >> $GITHUB_ENV
 
     - name: Upload main release
       uses: actions/upload-release-asset@v1.0.1
