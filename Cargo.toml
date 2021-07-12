@@ -1,7 +1,11 @@
 [package]
 name = "pc"
-license-file = "LICENSE"
 version = "0.1.1"
+authors = ["Oliver Koch"]
+description = "A cli command which copies the absolute Path of the given file or directory to the clipboard."
+readme = "README.md"
+repository = "https://github.com/oltoko/PathCopy"
+license-file = "LICENSE"
 edition = "2018"
 
 [dependencies]
