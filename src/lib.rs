@@ -4,7 +4,7 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
 pub fn to_absolut_paths(input: Values) -> Vec<PathBuf> {
-    return input.map(to_absolut_path).collect();
+    input.map(to_absolut_path).collect()
 }
 
 fn to_absolut_path<S: AsRef<OsStr> + ?Sized>(input: &S) -> PathBuf {
@@ -15,13 +15,13 @@ fn to_absolut_path<S: AsRef<OsStr> + ?Sized>(input: &S) -> PathBuf {
         std::process::exit(1);
     }
 
-    return match path.canonicalize() {
+    match path.canonicalize() {
         Ok(buf) => buf,
         Err(e) => {
             eprintln!("Failed to get absolute path of {}: {}", path.display(), e);
             std::process::exit(2);
         }
-    };
+    }
 }
 
 pub fn paste_to_clipboard(paths: Vec<PathBuf>) {
@@ -46,17 +46,17 @@ fn concat_paths(paths: Vec<PathBuf>) -> String {
         .iter()
         .map(|buf| convert_to_string(buf.as_path()))
         .collect();
-    return strings.join(" ");
+    strings.join(" ")
 }
 
 fn convert_to_string(path: &Path) -> String {
-    return match path.to_path_buf().into_os_string().into_string() {
+    match path.to_path_buf().into_os_string().into_string() {
         Ok(s) => s,
         Err(_) => {
             eprintln!("Failed to place the given path into the clipboard! The absolute version might contain some unsupported characters.");
             std::process::exit(3);
         }
-    };
+    }
 }
 
 #[cfg(test)]
