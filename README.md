@@ -24,5 +24,19 @@ Use the binaries for the latest [Release](https://github.com/oltoko/PathCopy/rel
 ## Usage
 
 ```sh
-$ pc some/relative/path
+pc [OPTIONS] <path>...
+
+FLAGS:
+    -h, --help       Prints help information
+    -v, --version    Prints version information
+
+OPTIONS:
+    -s, --separator <separator>    The separator which should be used when multiple paths are put into the clipboard.
+                                   You can choose between 3 separators:
+                                   	%w - A whitespace character
+                                   	%n - The system specific line break
+                                   	%t - A tab character [default: %w]  [possible values: %w, %n, %t]
+
+ARGS:
+    <path>...    The file(s) or directory(s) from which the absolute path(s) should be copied.
 ```
