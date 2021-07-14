@@ -24,10 +24,10 @@ fn to_absolut_path<S: AsRef<OsStr> + ?Sized>(input: &S) -> PathBuf {
     }
 }
 
-pub fn paste_to_clipboard(paths: Vec<PathBuf>) {
+pub fn paste_to_clipboard(paths: Vec<PathBuf>, sep: &str) {
     let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
 
-    let content = concat_paths(paths);
+    let content = concat_paths(paths, sep);
 
     match ctx.set_contents(content) {
         Ok(()) => (), /* Everything is fine 😌 */
@@ -41,12 +41,12 @@ pub fn paste_to_clipboard(paths: Vec<PathBuf>) {
     };
 }
 
-fn concat_paths(paths: Vec<PathBuf>) -> String {
+fn concat_paths(paths: Vec<PathBuf>, sep: &str) -> String {
     let strings: Vec<String> = paths
         .iter()
         .map(|buf| convert_to_string(buf.as_path()))
         .collect();
-    strings.join(" ")
+    strings.join(sep)
 }
 
 fn convert_to_string(path: &Path) -> String {
@@ -61,20 +61,20 @@ fn convert_to_string(path: &Path) -> String {
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
     use super::*;
+    use std::path::Path;
 
     #[test]
     fn concat_paths_joins_two_paths_with_separator() {
         let path_1 = Path::new("./Cargo.toml").to_path_buf();
         let path_2 = Path::new("./Cargo.lock").to_path_buf();
-        let actual = concat_paths(vec!(path_1, path_2));
-        assert_eq!(actual, "./Cargo.toml ./Cargo.lock")
+        let actual = concat_paths(vec![path_1, path_2], "🦀");
+        assert_eq!(actual, "./Cargo.toml🦀./Cargo.lock")
     }
 
     #[test]
     fn concat_paths_dont_add_separator_for_single_value() {
-        let actual = concat_paths(vec!(Path::new("./Cargo.toml").to_path_buf()));
+        let actual = concat_paths(vec![Path::new("./Cargo.toml").to_path_buf()], " ");
         assert_eq!(actual, "./Cargo.toml")
     }
 
