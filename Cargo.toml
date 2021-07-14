@@ -1,6 +1,6 @@
 [package]
 name = "pc"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Oliver Koch"]
 description = "A cli command which copies the absolute Path of the given file or directory to the clipboard."
 readme = "README.md"

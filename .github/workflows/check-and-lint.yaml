@@ -12,15 +12,20 @@ jobs:
     name: Rustfmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           components: rustfmt
           override: true
-      - run: rustup component add rustfmt
-      - uses: actions-rs/cargo@v1
+
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
@@ -29,21 +34,30 @@ jobs:
     name: Clippy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           components: clippy
           override: true
-      - uses: actions-rs/clippy-check@v1
+
+      - name: Linting
+        uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features
           name: Clippy Output
 
   check:
-    name: Check
+    name: Check & Test
+    needs:
+      - fmt
+      - clippy
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -58,18 +72,27 @@ jobs:
             os: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
-      
-      - uses: actions-rs/toolchain@v1
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
-      
+
       - name: Install Build Dependencies (Linux)
         run: "sudo apt -y install xorg-dev libxcb-shape0-dev libxcb-xfixes0-dev"
         if: matrix.os == 'ubuntu-latest'
 
-      - uses: actions-rs/cargo@v1
+      - name: Execute Check
+        uses: actions-rs/cargo@v1
         with:
           command: check
+
+      - name: Run Tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test

@@ -1,8 +1,12 @@
 use clap::{crate_version, App, Arg};
-use clipboard::{ClipboardContext, ClipboardProvider};
-use std::path::Path;
 
 const PATH_NAME: &str = "path";
+const SEPARATOR_NAME: &str = "separator";
+
+#[cfg(any(target_family = "windows"))]
+const LINE_BREAK: &str = "\r\n";
+#[cfg(any(target_family = "unix"))]
+const LINE_BREAK: &str = "\n";
 
 fn main() {
     let matches = App::new("PathCopy")
@@ -10,45 +14,50 @@ fn main() {
         .about("Copies the absolute Path of the given file or directory to the clipboard. It follows symlinks and uses the absolute path of the linked file.")
         .after_help("If there are any issues, feel free to fill in a bug\nhttps://github.com/oltoko/PathCopy/issues")
         .arg(Arg::with_name(PATH_NAME)
-            .help("The file or directory from which the absolute path should be copied.")
+            .help("The file(s) or directory(s) from which the absolute path(s) should be copied.")
+            .multiple(true)
             .required(true)
             .index(1))
+        .arg(Arg::with_name(SEPARATOR_NAME)
+            .help("The separator which should be used when multiple paths are put into the clipboard.\n\
+                    You can choose between 3 separators:\n\
+                    \t%w - A whitespace character\n\
+                    \t%n - The system specific line break\n\
+                    \t%t - A tab character")
+            .short("s")
+            .long("separator")
+            .possible_values(&["%w", "%n", "%t"])
+            .default_value("%w"))
         .get_matches();
 
-    let input_path = matches.value_of(PATH_NAME).unwrap();
-    let path = Path::new(input_path);
+    let inputs = matches.values_of(PATH_NAME).unwrap();
+    let sep = matches.value_of(SEPARATOR_NAME).unwrap();
+    let sep = fetch_separator_from_input(sep);
 
-    if !path.exists() {
-        eprintln!("The given path doesn't exist!");
-        std::process::exit(1);
+    let paths = pc::to_absolut_paths(inputs);
+    pc::paste_to_clipboard(paths, sep);
+}
+
+fn fetch_separator_from_input(s: &str) -> &str {
+    match s {
+        "%w" => " ",
+        "%n" => LINE_BREAK,
+        "%t" => "\t",
+        _ => {
+            eprintln!("Unexpected separator! This should not happen, please fill in a Bug.");
+            std::process::exit(5);
+        }
     }
+}
 
-    let path = match path.canonicalize() {
-        Ok(buf) => buf,
-        Err(e) => {
-            eprintln!("Failed to get absolute path of {}: {}", input_path, e);
-            std::process::exit(2);
-        }
-    };
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
-
-    let content = match path.into_os_string().into_string() {
-        Ok(s) => s,
-        Err(_) => {
-            eprintln!("Failed to place the given path into the clipboard. The absolute version might contain some unsupported characters.");
-            std::process::exit(3);
-        }
-    };
-
-    match ctx.set_contents(content) {
-        Ok(()) => (), /* Everything is fine 😌 */
-        Err(e) => {
-            eprintln!(
-                "Failed to place the absolute path of {} into the clipboard: {}",
-                input_path, e
-            );
-            std::process::exit(4);
-        }
-    };
+    #[test]
+    fn fetch_separator_from_input_returns_correct_values() {
+        assert_eq!(fetch_separator_from_input("%w"), " ");
+        assert_eq!(fetch_separator_from_input("%n"), LINE_BREAK);
+        assert_eq!(fetch_separator_from_input("%t"), "\t");
+    }
 }
