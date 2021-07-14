@@ -23,7 +23,7 @@ Use the binaries for the latest [Release](https://github.com/oltoko/PathCopy/rel
 
 ## Usage
 
-```sh
+```
 pc [OPTIONS] <path>...
 
 FLAGS:
