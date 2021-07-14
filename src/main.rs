@@ -3,11 +3,9 @@ use clap::{crate_version, App, Arg};
 const PATH_NAME: &str = "path";
 const SEPARATOR_NAME: &str = "separator";
 
-#[cfg(any(target_os = "windows"))]
+#[cfg(any(target_family = "windows"))]
 const LINE_BREAK: &str = "\r\n";
-#[cfg(any(target_os = "linux"))]
-const LINE_BREAK: &str = "\n";
-#[cfg(any(target_os = "macos"))]
+#[cfg(any(target_family = "unix"))]
 const LINE_BREAK: &str = "\n";
 
 fn main() {
