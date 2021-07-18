@@ -21,13 +21,15 @@ fn main() {
         .arg(Arg::with_name(SEPARATOR_NAME)
             .help("The separator which should be used when multiple paths are put into the clipboard.\n\
                     You can choose between 3 separators:\n\
-                    \t%w - A whitespace character\n\
+                    \t%w - A whitespace character [default]\n\
                     \t%n - The system specific line break\n\
                     \t%t - A tab character")
             .short("s")
             .long("separator")
             .possible_values(&["%w", "%n", "%t"])
-            .default_value("%w"))
+            .default_value("%w")
+            .hide_default_value(true)
+            .hide_possible_values(true))
         .get_matches();
 
     let inputs = matches.values_of(PATH_NAME).unwrap();
