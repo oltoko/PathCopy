@@ -13,8 +13,8 @@ $ brew install pathcopy
 ### Debian based
 
 ```sh
-$ wget https://github.com/oltoko/PathCopy/releases/download/0.1.1/pc_0.1.1_amd64.deb
-$ sudo dpkg -i pc_0.1.1_amd64.deb
+$ wget https://github.com/oltoko/PathCopy/releases/download/0.2.1/pc_0.2.1_amd64.deb
+$ sudo dpkg -i pc_0.2.1_amd64.deb
 ```
 
 ### Other
@@ -33,9 +33,9 @@ FLAGS:
 OPTIONS:
     -s, --separator <separator>    The separator which should be used when multiple paths are put into the clipboard.
                                    You can choose between 3 separators:
-                                   	%w - A whitespace character
+                                   	%w - A whitespace character [default]
                                    	%n - The system specific line break
-                                   	%t - A tab character [default: %w]  [possible values: %w, %n, %t]
+                                   	%t - A tab character
 
 ARGS:
     <path>...    The file(s) or directory(s) from which the absolute path(s) should be copied.
