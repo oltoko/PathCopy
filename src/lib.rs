@@ -1,14 +1,12 @@
-use clap::Values;
 use clipboard::{ClipboardContext, ClipboardProvider};
-use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
-pub fn to_absolut_paths(input: Values) -> Vec<PathBuf> {
-    input.map(to_absolut_path).collect()
+pub fn to_absolut_paths(input: Vec<String>) -> Vec<PathBuf> {
+    input.into_iter().map(to_absolut_path).collect()
 }
 
-fn to_absolut_path<S: AsRef<OsStr> + ?Sized>(input: &S) -> PathBuf {
-    let path = Path::new(input);
+fn to_absolut_path(input: String) -> PathBuf {
+    let path = Path::new(&input);
 
     if !path.exists() {
         eprintln!("The path '{}' doesn't exist!", path.display());

@@ -1,13 +1,14 @@
 [package]
 name = "pc"
-version = "0.2.1"
+version = "0.3.0"
+description = "Copies the absolute Path of the given file or directory to the clipboard. It follows symlinks and uses the absolute path of the linked file."
 authors = ["Oliver Koch"]
-description = "A cli command which copies the absolute Path of the given file or directory to the clipboard."
-readme = "README.md"
 repository = "https://github.com/oltoko/PathCopy"
-license-file = "LICENSE"
+license = "MIT"
+keywords = ["cli", "clipboard"]
+categories = ["command-line-utilities"]
 edition = "2018"
 
 [dependencies]
 clipboard = "0.5"
-clap = "2.33"
+clap = { version = "4.5", features = ["derive"] }
