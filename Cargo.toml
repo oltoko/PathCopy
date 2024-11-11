@@ -7,7 +7,7 @@ repository = "https://github.com/oltoko/PathCopy"
 license = "MIT"
 keywords = ["cli", "clipboard"]
 categories = ["command-line-utilities"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 clipboard = "0.5"
