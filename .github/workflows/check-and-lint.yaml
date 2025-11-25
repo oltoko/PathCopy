@@ -14,21 +14,10 @@ jobs:
     steps:
 
       - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          components: rustfmt
-          override: true
+        uses: actions/checkout@v5
 
       - name: Check formatting
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all --check
 
   clippy:
     name: Clippy
@@ -36,22 +25,10 @@ jobs:
     steps:
 
       - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          components: clippy
-          override: true
+        uses: actions/checkout@v5
 
       - name: Linting
-        uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features
-          name: Clippy Output
+        run: cargo clippy
 
   check:
     name: Check & Test
@@ -76,23 +53,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Setup Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-
       - name: Install Build Dependencies (Linux)
         run: "sudo apt -y install xorg-dev libxcb-shape0-dev libxcb-xfixes0-dev"
         if: matrix.os == 'ubuntu-latest'
 
-      - name: Execute Check
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
+      - name: Check
+        run: cargo check
 
-      - name: Run Tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
+      - name: Tests
+        run: cargo test
