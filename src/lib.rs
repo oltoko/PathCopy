@@ -51,7 +51,9 @@ fn convert_to_string(path: &Path) -> String {
     match path.to_path_buf().into_os_string().into_string() {
         Ok(s) => s,
         Err(_) => {
-            eprintln!("Failed to place the given path into the clipboard! The absolute version might contain some unsupported characters.");
+            eprintln!(
+                "Failed to place the given path into the clipboard! The absolute version might contain some unsupported characters."
+            );
             std::process::exit(3);
         }
     }
