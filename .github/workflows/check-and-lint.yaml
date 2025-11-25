@@ -51,11 +51,7 @@ jobs:
     steps:
 
       - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Install Build Dependencies (Linux)
-        run: "sudo apt -y install xorg-dev libxcb-shape0-dev libxcb-xfixes0-dev"
-        if: matrix.os == 'ubuntu-latest'
+        uses: actions/checkout@v5
 
       - name: Check
         run: cargo check
