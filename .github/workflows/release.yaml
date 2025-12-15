@@ -92,7 +92,7 @@ jobs:
         override: true
 
     - name: Get release download URL
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: artifacts
         path: artifacts
