@@ -1,6 +1,6 @@
 [package]
 name = "pc"
-version = "0.3.0"
+version = "0.3.1"
 description = "Copies the absolute Path of the given file or directory to the clipboard. It follows symlinks and uses the absolute path of the linked file."
 authors = ["Oliver Koch"]
 repository = "https://github.com/oltoko/PathCopy"
