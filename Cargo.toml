@@ -1,8 +1,8 @@
 [package]
 name = "pc"
-version = "0.3.1"
+version = "0.4.0"
 description = "Copies the absolute Path of the given file or directory to the clipboard. It follows symlinks and uses the absolute path of the linked file."
-authors = ["Oliver Koch"]
+authors = ["Oliver Koch-Witzig"]
 repository = "https://github.com/oltoko/PathCopy"
 license = "MIT"
 keywords = ["cli", "clipboard"]
@@ -10,5 +10,5 @@ categories = ["command-line-utilities"]
 edition = "2024"
 
 [dependencies]
-clipboard = "0.5"
+copypasta = "0.10"
 clap = { version = "4", features = ["derive"] }

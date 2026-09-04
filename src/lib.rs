@@ -1,4 +1,4 @@
-use clipboard::{ClipboardContext, ClipboardProvider};
+use copypasta::{ClipboardContext, ClipboardProvider};
 use std::path::{Path, PathBuf};
 
 pub fn to_absolut_paths(input: Vec<String>) -> Vec<PathBuf> {
@@ -23,7 +23,7 @@ fn to_absolut_path(input: String) -> PathBuf {
 }
 
 pub fn paste_to_clipboard(paths: Vec<PathBuf>, sep: &str) {
-    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+    let mut ctx: ClipboardContext = ClipboardContext::new().unwrap();
 
     let content = concat_paths(paths, sep);
 
