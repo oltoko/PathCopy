@@ -84,13 +84,6 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v7
 
-    - name: Setup Rust Toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
-
     - name: Get release download URL
       uses: actions/download-artifact@v8
       with:
@@ -115,10 +108,8 @@ jobs:
       run: "sudo apt -y install xorg-dev libxcb-shape0-dev libxcb-xfixes0-dev"
 
     - name: Build
-      uses: actions-rs/cargo@v1
-      with:
-        command: build
-        args: --release --verbose
+      run: |
+        cargo build --release
 
     - name: Strip release binary (macOS or Linux)
       if: matrix.os != 'windows-latest'
@@ -157,7 +148,7 @@ jobs:
     - name: Build Debian release (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: |
-        cargo install cargo-deb --version 1.30.0 --locked
+        cargo install cargo-deb
         cargo deb
         cp ./target/debian/pc_*.deb ./pc_${{ env.RELEASE_VERSION }}_amd64.deb
 
